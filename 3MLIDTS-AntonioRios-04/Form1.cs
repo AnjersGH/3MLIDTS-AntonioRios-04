@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Runtime.Remoting.Channels;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace _3MLIDTS_AntonioRios_04
@@ -9,6 +11,96 @@ namespace _3MLIDTS_AntonioRios_04
         public Form1()
         {
             InitializeComponent();
+
+            tbNombre.TextChanged += ValidarNombre;
+            tbApellido.TextChanged += ValidarApellido;
+            tbEdad.TextChanged += ValidarEdad;
+            tbEstatura.TextChanged += ValidarEstatura;
+            tbTelefono.Leave += ValidarTelefono;
+        }
+
+        private void ValidarTelefono(object sender, EventArgs e)
+        {
+            TextBox textboxLocal = (TextBox)sender;
+            if (!TelefonoValido(textboxLocal.Text))
+            {
+                MessageBox.Show("Escriba un telefono valido", "Error telefono", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textboxLocal.BackColor = System.Drawing.Color.IndianRed;
+                textboxLocal.Clear();
+
+            }
+            else
+            {
+                textboxLocal.BackColor = System.Drawing.Color.LightGreen;
+            }
+        }
+
+        private bool TelefonoValido(string valor)
+        {
+            long resultado;
+            return long.TryParse(valor, out resultado) &&valor.Length==10;
+        }
+
+
+        private void ValidarEstatura(object sender, EventArgs e)
+        {
+            TextBox textboxLocal = (TextBox)sender;
+            if (!EsDecimalValido(textboxLocal.Text))
+            {
+                MessageBox.Show("Escriba una Estatura valida", "Error Estatura", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textboxLocal.Clear();
+            }
+        }
+        
+        private bool EsDecimalValido(string valor)
+        {
+            decimal resultado;
+            return decimal.TryParse(valor, out resultado);
+        }
+
+        private void ValidarNombre(object sender, EventArgs e)
+        {
+            TextBox textboxLocal= (TextBox)sender;
+            if (!EsTextoValido(textboxLocal.Text)) {
+                MessageBox.Show("Escriba un Nombre valido","Error Nombre", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textboxLocal.Clear();
+            
+            }
+        }
+
+        private void ValidarApellido(object sender, EventArgs e)
+        {
+            TextBox textboxLocal = (TextBox)sender;
+            if (!EsTextoValido(textboxLocal.Text))
+            {
+                MessageBox.Show("Escriba un Apellido valido", "Error Apellido", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textboxLocal.Clear();
+
+            }
+        }
+
+        private void ValidarEdad(object sender, EventArgs e)
+        {
+            TextBox textLocal=(TextBox)sender;
+            if (!EsEnteroValido(textLocal.Text))
+            {
+                MessageBox.Show("Escriba una Edad", "Error Edad", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                textLocal.Clear();
+
+            }
+
+
+        }
+        private bool EsEnteroValido(string valor)
+        {
+            int resultado;
+            return int.TryParse(valor, out resultado);
+        }
+
+        private bool EsTextoValido(string Valor)
+        {
+            return Regex.IsMatch(Valor, @"^[a-zA-Z\s]+$");
+
         }
 
         private void label5_Click(object sender, EventArgs e)
